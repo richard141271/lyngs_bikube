@@ -75,10 +75,14 @@ class Game{
     });
     // Touch/Pointer joystick
     const dead=6, maxR=60;
-    const updateDir=(cx,cy)=>{
+    const toCanvas=(cx,cy)=>{
       const r=canvas.getBoundingClientRect();
-      const x=cx-r.left,y=cy-r.top;
-      const dx=x-this._touchStartX,dy=y-this._touchStartY;
+      const sx=canvas.width/r.width, sy=canvas.height/r.height;
+      return {x:(cx-r.left)*sx, y:(cy-r.top)*sy};
+    };
+    const updateDir=(cx,cy)=>{
+      const p=toCanvas(cx,cy);
+      const dx=p.x-this._touchStartX,dy=p.y-this._touchStartY;
       const d=Math.hypot(dx,dy);
       if(d<dead){this.touchDir.x=0;this.touchDir.y=0;return;}
       const k=Math.min(1,d/maxR);
@@ -86,16 +90,18 @@ class Game{
       this.touchDir.y=(dy/d)*k;
     };
     canvas.addEventListener("pointerdown",(e)=>{
-      this._touchStartX=e.clientX;this._touchStartY=e.clientY;
+      e.preventDefault();
+      const p=toCanvas(e.clientX,e.clientY);
+      this._touchStartX=p.x;this._touchStartY=p.y;
       this.touchDir.x=0;this.touchDir.y=0;
       canvas.setPointerCapture?.(e.pointerId);
-    });
+    },{passive:false});
     canvas.addEventListener("pointermove",(e)=>{
-      if(this._touchStartX!=null){updateDir(e.clientX,e.clientY)}
-    });
-    const endTouch=()=>{this._touchStartX=null;this._touchStartY=null;this.touchDir.x=0;this.touchDir.y=0};
-    canvas.addEventListener("pointerup",endTouch);
-    canvas.addEventListener("pointercancel",endTouch);
+      if(this._touchStartX!=null){e.preventDefault();updateDir(e.clientX,e.clientY)}
+    },{passive:false});
+    const endTouch=(e)=>{e&&e.preventDefault&&e.preventDefault();this._touchStartX=null;this._touchStartY=null;this.touchDir.x=0;this.touchDir.y=0};
+    canvas.addEventListener("pointerup",endTouch,{passive:false});
+    canvas.addEventListener("pointercancel",endTouch,{passive:false});
     btnEstablish.addEventListener("click",()=>{
       if(!this.queen)return;
       const gx=Math.max(0,Math.min(GRID_W-1,Math.floor(this.queen.x/CW)));
