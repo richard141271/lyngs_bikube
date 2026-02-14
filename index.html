@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Biekoloni – MVP</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="ui">
+    <div id="title">Biekoloni</div>
+    <div id="stats">
+      <div id="global-stats">
+        <span>Aktive kuber: <strong id="activeHives">0</strong></span>
+        <span>Totalt produsert: <strong id="totalHoney">0</strong></span>
+        <span>Score: <strong id="score">0</strong></span>
+        <span>High score: <strong id="highScore">0</strong></span>
+      </div>
+      <div id="selected-stats">
+        <span>Kube bier: <strong id="selBees">0</strong></span>
+        <span>Honning: <strong id="selHoney">0</strong></span>
+        <span>Larver: <strong id="selLarvae">0</strong></span>
+      </div>
+    </div>
+    <div id="controls">
+      <button id="btnEstablish" disabled>Etabler kube</button>
+      <button id="btnSwarm" disabled>Sverm</button>
+      <button id="btnRestart">Restart</button>
+      <span class="hint">Styring: WASD eller piltaster. Klikk på kube for å velge.</span>
+    </div>
+  </div>
+  <canvas id="game" width="960" height="600"></canvas>
+  <script src="main.js"></script>
+</body>
+</html>
+
