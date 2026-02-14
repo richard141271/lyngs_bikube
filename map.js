@@ -67,9 +67,31 @@ class MapGrid{
     }
   }
   draw(ctx){
-    const g=ctx.createLinearGradient(0,0,0,this.h*this.ch);
-    g.addColorStop(0,"#f9f3da");g.addColorStop(0.4,"#e8f4d9");g.addColorStop(1,"#d7ebc8");
-    ctx.fillStyle=g;ctx.fillRect(0,0,this.w*this.cw,this.h*this.ch);
+    const W=this.w*this.cw,H=this.h*this.ch;
+    // sky + sol
+    const g=ctx.createLinearGradient(0,0,0,H);
+    g.addColorStop(0,"#ffeaa7");g.addColorStop(0.35,"#f7f3df");g.addColorStop(1,"#d7ebc8");
+    ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+    ctx.save();
+    ctx.globalAlpha=0.35;
+    const sunX=W*0.12,sunY=H*0.18, sunR=Math.min(W,H)*0.12;
+    const sg=ctx.createRadialGradient(sunX,sunY,0,sunX,sunY,sunR*2);
+    sg.addColorStop(0,"rgba(255,230,120,1)");
+    sg.addColorStop(1,"rgba(255,230,120,0)");
+    ctx.fillStyle=sg;ctx.beginPath();ctx.arc(sunX,sunY,sunR*2.2,0,6.28);ctx.fill();
+    ctx.globalAlpha=1;ctx.restore();
+    // enkle skyer
+    const drawCloud=(x,y,s)=>{
+      ctx.fillStyle="rgba(255,255,255,0.85)";
+      ctx.beginPath();
+      ctx.arc(x,y,s,0,6.28);
+      ctx.arc(x+s*0.8,y-s*0.2,s*0.8,0,6.28);
+      ctx.arc(x-s*0.8,y-s*0.2,s*0.9,0,6.28);
+      ctx.fill();
+    };
+    drawCloud(W*0.35,H*0.15,18);
+    drawCloud(W*0.6,H*0.12,22);
+    drawCloud(W*0.8,H*0.18,16);
     ctx.strokeStyle="rgba(0,0,0,0.05)";ctx.lineWidth=1;
     for(let y=0;y<this.h;y++){for(let x=0;x<this.w;x++){
       const cx=x*this.cw,cy=y*this.ch;

@@ -56,6 +56,7 @@ class Game{
     this.map=new MapGrid(GRID_W,GRID_H,canvas.width/GRID_W,canvas.height/GRID_H);
     this.keys={};
     this.touchDir={x:0,y:0};
+    this.particles=[];
     this.hives=[];this.selected=-1;
     this.resizeCanvas();
     this.queen=new Queen(canvas.width/2,canvas.height/2);
@@ -63,6 +64,13 @@ class Game{
     this.totalProduced=0;this.score=0;this.highScore=parseInt(localStorage.getItem("biekoloni.highScore")||"0",10)||0;
     this.money=parseInt(localStorage.getItem("biekoloni.money")||"0",10)||0;
     this.bind();
+    window.__emitParticle=(x,y,color,glow=0.8)=>{
+      for(let i=0;i<1;i++){
+        const a=Math.random()*Math.PI*2,m=40+Math.random()*60;
+        const vx=Math.cos(a)*m,vy=Math.sin(a)*m;
+        this.particles.push({x,y,vx,vy,life:0.7+Math.random()*0.6,color,glow});
+      }
+    };
     this.loop=this.loop.bind(this);
     requestAnimationFrame(this.loop)
   }
@@ -162,6 +170,14 @@ class Game{
     }
     this.map.update(dt);
     for(const h of this.hives)h.update(dt,this.map);
+    // particles
+    for(let i=this.particles.length-1;i>=0;i--){
+      const p=this.particles[i];
+      p.life-=dt;
+      if(p.life<=0){this.particles.splice(i,1);continue}
+      p.vy+=12*dt;
+      p.x+=p.vx*dt;p.y+=p.vy*dt;
+    }
     let active=0,t=0;
     for(const h of this.hives){active++;t+=h.totalProduced+h.honey}
     this.score=Math.floor(t+active*50);
@@ -171,6 +187,20 @@ class Game{
     ctx.clearRect(0,0,canvas.width,canvas.height);
     this.map.draw(ctx);
     for(let i=0;i<this.hives.length;i++){this.hives[i].draw(i===this.selected)}
+    // particles (under queen highlight)
+    ctx.save();ctx.globalCompositeOperation="lighter";
+    for(const p of this.particles){
+      ctx.globalAlpha=Math.max(0,p.life);
+      const r=3+3*p.glow;
+      const g=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,r*3);
+      g.addColorStop(0,p.color);g.addColorStop(1,"rgba(0,0,0,0)");
+      ctx.fillStyle=g;ctx.beginPath();ctx.arc(p.x,p.y,r,0,6.28);ctx.fill();
+    }
+    ctx.restore();
+    // queen highlight
+    ctx.save();ctx.strokeStyle="rgba(255,210,70,0.8)";ctx.lineWidth=3;
+    ctx.beginPath();ctx.arc(this.queen.x,this.queen.y,16+Math.sin(performance.now()/180)*2,0,6.28);ctx.stroke();
+    ctx.restore();
     this.queen.draw(ctx)
   }
   ui(){

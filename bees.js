@@ -66,6 +66,10 @@ class WorkerBee{
           this.carryPollen=y.pollen;
           this.target.c.active=false;
           this.target.c.timer=10;
+          if(window.__emitParticle){
+            const col=this.target.c.fType==="purple"?"#b38be6":(this.target.c.fType==="yellow"?"#ffd24d":"#fff6e5");
+            for(let i=0;i<10;i++)window.__emitParticle(this.tx,this.ty,col,0.7);
+          }
         }else {this.carryNectar=0;this.carryPollen=0;}
         this.state="toHive"
       }
@@ -78,6 +82,9 @@ class WorkerBee{
         this.hive.nectar+=this.carryNectar;
         this.hive.pollen+=this.carryPollen;
         this.hive.totalProduced+=this.carryNectar;
+        if(window.__emitParticle){
+          for(let i=0;i<12;i++)window.__emitParticle(this.hive.x,this.hive.y,"#f2b300",1.0);
+        }
         this.carryNectar=0;this.carryPollen=0;
         this.state="idle"
       }
