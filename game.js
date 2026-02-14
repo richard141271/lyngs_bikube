@@ -144,12 +144,9 @@ class Game{
   }
   resizeCanvas(){
     const ui=document.getElementById("ui");
-    const spacer=document.getElementById("ui-spacer");
     const padding=16;
     const availW=window.innerWidth - padding*2;
     const uiH=ui.getBoundingClientRect().height;
-    // Skyv innholdet ned via spacer slik at canvas aldri ligger under det faste UI-laget
-    if(spacer) spacer.style.height=`${Math.ceil(uiH+8)}px`;
     const availH=window.innerHeight - uiH - padding*2;
     const ratio=GRID_W/GRID_H;
     let w=Math.min(availW, availH*ratio);
@@ -208,7 +205,6 @@ class Game{
   }
   ui(){
     const uiEl=document.getElementById("ui");
-    const spacer=document.getElementById("ui-spacer");
     elActiveHives.textContent=String(this.hives.length);
     elTotalHoney.textContent=String(Math.floor(this.totalProduced));
     elScore.textContent=String(this.score);
@@ -219,9 +215,9 @@ class Game{
     elMoney.textContent=String(this.money);
     btnEstablish.disabled=!this.queen;
     btnSell.disabled=!(h&&h.honey>=1)
-    // Hvis UI-høyden endres, juster spacer-høyden
+    // Hvis UI-høyden endres, re-sizer vi canvas basert på ny høyde
     const hNow=Math.ceil(uiEl.getBoundingClientRect().height);
-    if(this._lastUIH!==hNow){this._lastUIH=hNow;if(spacer) spacer.style.height=`${hNow+8}px`}
+    if(this._lastUIH!==hNow){this._lastUIH=hNow;this.resizeCanvas()}
   }
   loop(t){
     const dt=Math.min(0.033,(t-this.last)/1000);this.last=t;
