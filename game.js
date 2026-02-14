@@ -34,18 +34,19 @@ class Hive{
   }
   draw(selected){
     ctx.save();ctx.translate(this.x,this.y);
-    ctx.fillStyle="rgba(0,0,0,0.1)";ctx.beginPath();ctx.ellipse(6,8,10,8,0,0,6.28);ctx.fill();
-    ctx.beginPath();
-    const s=12;
-    for(let i=0;i<6;i++){const a=i*Math.PI/3;const px=Math.cos(a)*s,py=Math.sin(a)*s;i?ctx.lineTo(px,py):ctx.moveTo(px,py)}
-    ctx.closePath();
-    ctx.fillStyle=selected?"#e2a500":"#d6a21d";ctx.strokeStyle="#6b4a00";ctx.lineWidth=2;ctx.fill();ctx.stroke();
-    // Capacity bar
+    ctx.fillStyle="rgba(0,0,0,0.12)";ctx.beginPath();ctx.ellipse(8,10,12,9,0,0,6.28);ctx.fill();
+    const base=selected?"#e6b123":"#d9a018";
+    const g=ctx.createLinearGradient(0,-18,0,18);g.addColorStop(0,base);g.addColorStop(1,"#b8830f");
+    ctx.fillStyle=g;ctx.strokeStyle="#6b4a00";ctx.lineWidth=2;
+    ctx.beginPath();ctx.ellipse(0,-4,18,12,0,0,6.28);ctx.fill();ctx.stroke();
+    ctx.beginPath();ctx.ellipse(0,4,16,10,0,0,6.28);ctx.fill();ctx.stroke();
+    ctx.beginPath();ctx.ellipse(0,12,14,8,0,0,6.28);ctx.fill();ctx.stroke();
+    ctx.fillStyle="#3b2b1a";ctx.beginPath();ctx.ellipse(0,6,4,3,0,0,6.28);ctx.fill();
     const f=Math.max(0,Math.min(1,this.honey/this.capacity));
-    ctx.translate(-18,18);
-    ctx.fillStyle="rgba(0,0,0,0.12)";ctx.fillRect(0,0,36,6);
-    ctx.fillStyle="#f2b300";ctx.fillRect(0,0,36*f,6);
-    ctx.strokeStyle="rgba(0,0,0,0.25)";ctx.strokeRect(0,0,36,6);
+    ctx.translate(-20,22);
+    ctx.fillStyle="rgba(0,0,0,0.12)";ctx.fillRect(0,0,40,6);
+    ctx.fillStyle="#f2b300";ctx.fillRect(0,0,40*f,6);
+    ctx.strokeStyle="rgba(0,0,0,0.25)";ctx.strokeRect(0,0,40,6);
     ctx.restore();
     for(const b of this.workers)b.draw(ctx)
   }

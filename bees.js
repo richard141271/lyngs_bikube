@@ -22,12 +22,21 @@ class Queen{
   }
   draw(ctx){
     ctx.save();ctx.translate(this.x,this.y);
-    ctx.fillStyle="rgba(0,0,0,0.12)";ctx.beginPath();ctx.ellipse(6,8,8,6,0,0,6.28);ctx.fill();
-    ctx.fillStyle="#ffd34d";ctx.beginPath();ctx.arc(0,0,10,0,6.28);ctx.fill();
-    ctx.fillStyle="#6b4a00";ctx.fillRect(-8,-2,16,4);
-    ctx.fillStyle="#f2c200";ctx.beginPath();ctx.moveTo(-6,-10);ctx.lineTo(0,-15);ctx.lineTo(6,-10);ctx.fill();
-    ctx.save();ctx.rotate(Math.sin(this.wing)*0.3);ctx.fillStyle="rgba(120,200,230,0.7)";ctx.beginPath();ctx.ellipse(-6,-6,6,10,0,0,6.28);ctx.fill();ctx.restore();
-    ctx.save();ctx.rotate(-Math.sin(this.wing)*0.3);ctx.fillStyle="rgba(120,200,230,0.7)";ctx.beginPath();ctx.ellipse(6,-6,6,10,0,0,6.28);ctx.fill();ctx.restore();
+    ctx.fillStyle="rgba(0,0,0,0.14)";ctx.beginPath();ctx.ellipse(6,8,9,7,0,0,6.28);ctx.fill();
+    ctx.save();ctx.rotate(0.05);
+    ctx.fillStyle="rgba(130,210,240,0.75)";ctx.beginPath();ctx.ellipse(-10,-8,10,14,0,0,6.28);ctx.fill();
+    ctx.fillStyle="rgba(130,210,240,0.75)";ctx.beginPath();ctx.ellipse(10,-8,10,14,0,0,6.28);ctx.fill();
+    ctx.restore();
+    ctx.fillStyle="#f9c744";ctx.beginPath();ctx.ellipse(0,2,14,10,0,0,6.28);ctx.fill();
+    ctx.fillStyle="#6b4a00";ctx.fillRect(-10,-1,20,4);
+    ctx.fillStyle="#6b4a00";ctx.fillRect(-10,5,20,4);
+    ctx.fillStyle="#ffe076";ctx.beginPath();ctx.arc(-4,-6,8,0,6.28);ctx.fill();
+    ctx.fillStyle="#ffd34d";ctx.beginPath();ctx.arc(6,-4,6,0,6.28);ctx.fill();
+    ctx.fillStyle="#3b2b1a";ctx.beginPath();ctx.arc(-6,-7,2,0,6.28);ctx.fill();
+    ctx.fillStyle="#3b2b1a";ctx.beginPath();ctx.arc(1,-6,2,0,6.28);ctx.fill();
+    ctx.strokeStyle="#3b2b1a";ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(-8,-12);ctx.quadraticCurveTo(-5,-16,-2,-12);ctx.stroke();
+    ctx.strokeStyle="#3b2b1a";ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(2,-12);ctx.quadraticCurveTo(5,-16,8,-12);ctx.stroke();
+    ctx.fillStyle="#f2c200";ctx.beginPath();ctx.moveTo(-8,-15);ctx.lineTo(0,-20);ctx.lineTo(8,-15);ctx.arc(0,-16,2,0,6.28);ctx.fill();
     ctx.restore()
   }
 }
@@ -76,8 +85,10 @@ class WorkerBee{
   }
   draw(ctx){
     ctx.save();ctx.translate(this.x,this.y);
-    ctx.fillStyle="rgba(0,0,0,0.12)";ctx.beginPath();ctx.ellipse(2,3,2.5,2,0,0,6.28);ctx.fill();
-    ctx.fillStyle="#f7c84a";ctx.beginPath();ctx.arc(0,0,2.5,0,6.28);ctx.fill();
+    ctx.fillStyle="rgba(0,0,0,0.12)";ctx.beginPath();ctx.ellipse(2,3,3,2.2,0,0,6.28);ctx.fill();
+    ctx.fillStyle="#f7c84a";ctx.beginPath();ctx.arc(0,0,3,0,6.28);ctx.fill();
+    ctx.fillStyle="#6b4a00";ctx.fillRect(-2,-1,4,2);
+    ctx.fillStyle="rgba(130,210,240,0.7)";ctx.beginPath();ctx.ellipse(3,-2,3,4,0,0,6.28);ctx.fill();
     ctx.restore()
   }
 }
