@@ -28,6 +28,7 @@ class MapGrid{
       }
     }
   }
+  setCellSize(cw,ch){this.cw=cw;this.ch=ch}
   noise(x,y){
     const s=Math.sin(x*1.7+2.3)+Math.sin(y*1.9+4.1)+Math.sin((x+y)*0.6+1.1);
     return (s/3+1)/2

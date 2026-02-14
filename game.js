@@ -12,7 +12,6 @@ const elMoney=document.getElementById("money");
 const elSelBees=document.getElementById("selBees");
 const elSelHoney=document.getElementById("selHoney");
 const elSelLarvae=document.getElementById("selLarvae");
-const CW=canvas.width/GRID_W,CH=canvas.height/GRID_H;
 class Hive{
   constructor(x,y){
     this.x=x;this.y=y;
@@ -53,10 +52,11 @@ class Hive{
 }
 class Game{
   constructor(){
-    this.map=new MapGrid(GRID_W,GRID_H,CW,CH);
+    this.map=new MapGrid(GRID_W,GRID_H,canvas.width/GRID_W,canvas.height/GRID_H);
     this.keys={};
     this.touchDir={x:0,y:0};
     this.hives=[];this.selected=-1;
+    this.resizeCanvas();
     this.queen=new Queen(canvas.width/2,canvas.height/2);
     this.last=performance.now();
     this.totalProduced=0;this.score=0;this.highScore=parseInt(localStorage.getItem("biekoloni.highScore")||"0",10)||0;
@@ -66,6 +66,8 @@ class Game{
     requestAnimationFrame(this.loop)
   }
   bind(){
+    window.addEventListener("resize",()=>this.resizeCanvas());
+    window.addEventListener("orientationchange",()=>this.resizeCanvas());
     window.addEventListener("keydown",e=>{this.keys[e.key]=true});
     window.addEventListener("keyup",e=>{this.keys[e.key]=false});
     canvas.addEventListener("click",e=>{
@@ -104,8 +106,8 @@ class Game{
     canvas.addEventListener("pointercancel",endTouch,{passive:false});
     btnEstablish.addEventListener("click",()=>{
       if(!this.queen)return;
-      const gx=Math.max(0,Math.min(GRID_W-1,Math.floor(this.queen.x/CW)));
-      const gy=Math.max(0,Math.min(GRID_H-1,Math.floor(this.queen.y/CH)));
+      const gx=Math.max(0,Math.min(GRID_W-1,Math.floor(this.queen.x/this.map.cw)));
+      const gy=Math.max(0,Math.min(GRID_H-1,Math.floor(this.queen.y/this.map.ch)));
       const c=this.map.cells[this.map.idx(gx,gy)];
       if(c.kind!==2){
         const center=this.map.centerOf(gx,gy);
@@ -125,11 +127,28 @@ class Game{
       }
     });
     btnRestart.addEventListener("click",()=>{
-      this.map=new MapGrid(GRID_W,GRID_H,CW,CH);
+      this.map=new MapGrid(GRID_W,GRID_H,canvas.width/GRID_W,canvas.height/GRID_H);
       this.hives=[];this.selected=-1;
       this.queen=new Queen(canvas.width/2,canvas.height/2);
       this.totalProduced=0;this.score=0
     })
+  }
+  resizeCanvas(){
+    const ui=document.getElementById("ui");
+    const padding=16;
+    const availW=window.innerWidth - padding*2;
+    const uiH=ui.getBoundingClientRect().height;
+    const availH=window.innerHeight - uiH - padding*2;
+    const ratio=GRID_W/GRID_H;
+    let w=Math.min(availW, availH*ratio);
+    let h=w/ratio;
+    if(h>availH){h=availH;w=h*ratio}
+    w=Math.max(320,Math.floor(w));
+    h=Math.max(240,Math.floor(h));
+    canvas.width=w;
+    canvas.height=h;
+    // Update cell size for rendering and logic
+    this.map.setCellSize(w/GRID_W,h/GRID_H);
   }
   update(dt){
     this.queen.update(this.keys,dt,{w:canvas.width,h:canvas.height},this.touchDir);
