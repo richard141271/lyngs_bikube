@@ -1,9 +1,10 @@
 const GRID_W=20;
 const GRID_H=15;
 class Cell{
-  constructor(kind,value){
+  constructor(kind,value,fType){
     this.kind=kind;
     this.value=value;
+    this.fType=fType||null; // 'yellow'|'white'|'purple'
     this.active=true;
     this.timer=0
   }
@@ -16,10 +17,14 @@ class MapGrid{
     ;for(let y=0;y<h;y++){
       for(let x=0;x<w;x++){
         const n=this.noise(x*0.27,y*0.21);
-        let kind=0,value=0;
-        if(n>0.62){kind=1;value=1+((Math.random()*5)|0);}
+        let kind=0,value=0,fType=null;
+        if(n>0.62){
+          kind=1;value=1+((Math.random()*5)|0);
+          const r=Math.random();
+          fType=r<0.5?"yellow":(r<0.8?"white":"purple");
+        }
         if(n<0.18&&Math.random()<0.4){kind=2}
-        this.cells[y*w+x]=new Cell(kind,value)
+        this.cells[y*w+x]=new Cell(kind,value,fType)
       }
     }
   }
@@ -44,6 +49,13 @@ class MapGrid{
       if(c.kind===1&&c.active)return {gx,gy,c}
     }
     return null
+  }
+  yields(c){
+    // Map flower type to nectar/pollen yields
+    const base=c.value;
+    if(c.fType==="yellow") return {nectar: base*1.2, pollen: base*0.6};
+    if(c.fType==="purple") return {nectar: base*0.6, pollen: base*1.2};
+    return {nectar: base*0.9, pollen: base*0.9};
   }
   update(dt){
     for(const c of this.cells){
@@ -77,7 +89,10 @@ class MapGrid{
         ctx.translate(cx+this.cw/2,cy+this.ch/2);
         if(c.active){
           const r=Math.min(this.cw,this.ch)*0.18;
-          const col = c.value>=4? "#b38be6" : (c.value>=2? "#ffd24d" : "#ffffff");
+          let col="#ffffff";
+          if(c.fType==="yellow") col="#ffd24d";
+          else if(c.fType==="purple") col="#b38be6";
+          else col="#ffffff";
           ctx.fillStyle="rgba(0,0,0,0.08)";
           ctx.beginPath();ctx.ellipse(3,4,r*1.2,r*0.9,0,0,6.28);ctx.fill();
           ctx.fillStyle=col;ctx.beginPath();ctx.arc(0,0,r,0,6.28);ctx.fill();

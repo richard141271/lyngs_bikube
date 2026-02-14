@@ -10,4 +10,5 @@ button:disabled{opacity:.5;cursor:not-allowed}
 button#btnRestart{background:#8a4b2a}
 .hint{opacity:.8;font-size:.9rem}
 #game{display:block;margin:110px auto 16px auto;border:2px solid #d7e0cc;border-radius:10px;background:#e5f0da}
-
+/* Mobilvennlig: skru av scroll/zoom-gest på canvas og gjør responsiv bredde */
+#game{touch-action:none;-webkit-user-select:none;user-select:none;width:100%;max-width:960px;height:auto}

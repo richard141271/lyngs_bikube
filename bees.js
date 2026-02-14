@@ -2,14 +2,18 @@ class Queen{
   constructor(x,y){
     this.x=x;this.y=y;this.vx=0;this.vy=0;this.wing=0
   }
-  update(keys,dt,limits){
+  update(keys,dt,limits,dir){
     let ax=0,ay=0;
-    if(keys["a"]||keys["ArrowLeft"])ax-=1;
-    if(keys["d"]||keys["ArrowRight"])ax+=1;
-    if(keys["w"]||keys["ArrowUp"])ay-=1;
-    if(keys["s"]||keys["ArrowDown"])ay+=1;
+    if(dir&& (Math.abs(dir.x)>0.05||Math.abs(dir.y)>0.05)){
+      ax=dir.x;ay=dir.y;
+    }else{
+      if(keys["a"]||keys["ArrowLeft"])ax-=1;
+      if(keys["d"]||keys["ArrowRight"])ax+=1;
+      if(keys["w"]||keys["ArrowUp"])ay-=1;
+      if(keys["s"]||keys["ArrowDown"])ay+=1;
+    }
     const n=Math.hypot(ax,ay)||1;
-    const speed=140;
+    const speed=160;
     this.vx=ax/n*speed*dt;
     this.vy=ay/n*speed*dt;
     this.x=Math.max(0,Math.min(limits.w-1,this.x+this.vx));
@@ -30,7 +34,7 @@ class Queen{
 class WorkerBee{
   constructor(hive,map){
     this.hive=hive;this.map=map;this.x=hive.x;this.y=hive.y;
-    this.state="idle";this.target=null;this.carry=0
+    this.state="idle";this.target=null;this.carryNectar=0;this.carryPollen=0
   }
   chooseTarget(){
     const t=this.map.randomFlower();
@@ -48,10 +52,12 @@ class WorkerBee{
       const done=this.stepTo(dt,this.tx,this.ty,60);
       if(done){
         if(this.target&&this.target.c.active){
-          this.carry=this.target.c.value;
+          const y=this.map.yields(this.target.c);
+          this.carryNectar=y.nectar;
+          this.carryPollen=y.pollen;
           this.target.c.active=false;
           this.target.c.timer=10;
-        }else this.carry=0;
+        }else {this.carryNectar=0;this.carryPollen=0;}
         this.state="toHive"
       }
       return
@@ -59,9 +65,12 @@ class WorkerBee{
     if(this.state==="toHive"){
       const done=this.stepTo(dt,this.hive.x,this.hive.y,70);
       if(done){
-        this.hive.honey+=this.carry;
-        this.hive.totalProduced+=this.carry;
-        this.carry=0;this.state="idle"
+        // Deposit resources to hive stores
+        this.hive.nectar+=this.carryNectar;
+        this.hive.pollen+=this.carryPollen;
+        this.hive.totalProduced+=this.carryNectar;
+        this.carryNectar=0;this.carryPollen=0;
+        this.state="idle"
       }
     }
   }
