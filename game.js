@@ -147,6 +147,8 @@ class Game{
     const padding=16;
     const availW=window.innerWidth - padding*2;
     const uiH=ui.getBoundingClientRect().height;
+    // Skyv innholdet ned slik at canvas aldri ligger under det faste UI-laget
+    document.body.style.paddingTop=`${Math.ceil(uiH+8)}px`;
     const availH=window.innerHeight - uiH - padding*2;
     const ratio=GRID_W/GRID_H;
     let w=Math.min(availW, availH*ratio);
@@ -204,6 +206,7 @@ class Game{
     this.queen.draw(ctx)
   }
   ui(){
+    const uiEl=document.getElementById("ui");
     elActiveHives.textContent=String(this.hives.length);
     elTotalHoney.textContent=String(Math.floor(this.totalProduced));
     elScore.textContent=String(this.score);
@@ -214,6 +217,9 @@ class Game{
     elMoney.textContent=String(this.money);
     btnEstablish.disabled=!this.queen;
     btnSell.disabled=!(h&&h.honey>=1)
+    // Hvis UI-høyden endres (f.eks. bytte orientering/font), juster padding-top
+    const hNow=Math.ceil(uiEl.getBoundingClientRect().height);
+    if(this._lastUIH!==hNow){this._lastUIH=hNow;document.body.style.paddingTop=`${hNow+8}px`}
   }
   loop(t){
     const dt=Math.min(0.033,(t-this.last)/1000);this.last=t;

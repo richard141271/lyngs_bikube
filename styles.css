@@ -10,7 +10,7 @@ button{appearance:none;border:0;background:#2f5f2a;color:#fff;padding:8px 12px;b
 button:disabled{opacity:.5;cursor:not-allowed}
 button#btnRestart{background:#8a4b2a}
 .hint{opacity:.8;font-size:.9rem}
-/* Canvas under fast UI; liten topp-margin på mobil/desktop */
-#game{display:block;margin:12px auto 16px auto;border:2px solid #d7e0cc;border-radius:10px;background:#e5f0da}
+/* Canvas under fast UI; JS setter padding-top på body lik UI-høyde */
+#game{display:block;margin:0 auto 16px auto;border:2px solid #d7e0cc;border-radius:10px;background:#e5f0da}
 /* Mobilvennlig: skru av scroll/zoom-gest på canvas og gjør responsiv bredde */
 #game{touch-action:none;-webkit-user-select:none;user-select:none;width:100%;max-width:960px;height:auto}
