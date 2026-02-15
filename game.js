@@ -215,9 +215,8 @@ class Game{
     elMoney.textContent=String(this.money);
     btnEstablish.disabled=!this.queen;
     btnSell.disabled=!(h&&h.honey>=1)
-    // Hvis UI-høyden endres, re-sizer vi canvas basert på ny høyde
     const hNow=Math.ceil(uiEl.getBoundingClientRect().height);
-    if(this._lastUIH!==hNow){this._lastUIH=hNow;this.resizeCanvas()}
+    if(this._lastUIH!==hNow){this._lastUIH=hNow;canvas.style.marginTop=`${hNow+8}px`;this.resizeCanvas()}
   }
   loop(t){
     const dt=Math.min(0.033,(t-this.last)/1000);this.last=t;
