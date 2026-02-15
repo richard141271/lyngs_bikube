@@ -65,7 +65,6 @@ class Game{
     this.totalProduced=0;this.score=0;this.highScore=parseInt(localStorage.getItem("biekoloni.highScore")||"0",10)||0;
     this.money=parseInt(localStorage.getItem("biekoloni.money")||"0",10)||0;
     this.bind();
-    this.updateUIHeight();
     window.__emitParticle=(x,y,color,glow=0.8)=>{
       for(let i=0;i<1;i++){
         const a=Math.random()*Math.PI*2,m=40+Math.random()*60;
@@ -77,14 +76,8 @@ class Game{
     requestAnimationFrame(this.loop)
   }
   bind(){
-    window.addEventListener("resize",()=>{this.updateUIHeight();this.resizeCanvas()});
-    window.addEventListener("orientationchange",()=>{this.updateUIHeight();this.resizeCanvas()});
-    const ui=document.getElementById("ui");
-    if(window.ResizeObserver){
-      const ro=new ResizeObserver(()=>this.updateUIHeight());
-      ro.observe(ui);
-      this._ro=ro;
-    }
+    window.addEventListener("resize",()=>{this.resizeCanvas()});
+    window.addEventListener("orientationchange",()=>{this.resizeCanvas()});
     window.addEventListener("keydown",e=>{this.keys[e.key]=true});
     window.addEventListener("keyup",e=>{this.keys[e.key]=false});
     canvas.addEventListener("click",e=>{
@@ -164,17 +157,10 @@ class Game{
     h=Math.max(240,Math.floor(h));
     canvas.width=w;
     canvas.height=h;
+    canvas.style.width=`${w}px`;
+    canvas.style.height=`${h}px`;
     // Update cell size for rendering and logic
     this.map.setCellSize(w/GRID_W,h/GRID_H);
-  }
-  updateUIHeight(){
-    const ui=document.getElementById("ui");
-    if(!ui) return;
-    const hNow=Math.ceil(ui.getBoundingClientRect().height);
-    if(this._lastUIH!==hNow){
-      this._lastUIH=hNow;
-      document.documentElement.style.setProperty('--ui-h',`${hNow}px`);
-    }
   }
   update(dt){
     this.queen.update(this.keys,dt,{w:canvas.width,h:canvas.height},this.touchDir);
@@ -232,7 +218,6 @@ class Game{
     elMoney.textContent=String(this.money);
     btnEstablish.disabled=!this.queen;
     btnSell.disabled=!(h&&h.honey>=1)
-    this.updateUIHeight();
   }
   loop(t){
     const dt=Math.min(0.033,(t-this.last)/1000);this.last=t;
