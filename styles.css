@@ -1,5 +1,6 @@
 *{box-sizing:border-box}
 html,body{height:100%;margin:0;padding:0;background:#f3f6ef;color:#24301e;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
+body{padding-top:var(--ui-h,0px)}
 html,body{overscroll-behavior:contain;-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none}
 #ui{position:fixed;top:0;left:0;right:0;z-index:1000;padding:calc(8px + env(safe-area-inset-top,0px)) 12px 8px 12px;background:rgba(255,255,255,.95);backdrop-filter:saturate(1.2) blur(6px);display:flex;flex-direction:column;gap:6px;border-bottom:1px solid #d7e0cc}
 #ui-spacer{display:none;height:0}

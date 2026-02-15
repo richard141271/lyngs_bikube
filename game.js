@@ -58,12 +58,14 @@ class Game{
     this.touchDir={x:0,y:0};
     this.particles=[];
     this.hives=[];this.selected=-1;
+    this._lastUIH=0;
     this.resizeCanvas();
     this.queen=new Queen(canvas.width/2,canvas.height/2);
     this.last=performance.now();
     this.totalProduced=0;this.score=0;this.highScore=parseInt(localStorage.getItem("biekoloni.highScore")||"0",10)||0;
     this.money=parseInt(localStorage.getItem("biekoloni.money")||"0",10)||0;
     this.bind();
+    this.updateUIHeight();
     window.__emitParticle=(x,y,color,glow=0.8)=>{
       for(let i=0;i<1;i++){
         const a=Math.random()*Math.PI*2,m=40+Math.random()*60;
@@ -75,8 +77,14 @@ class Game{
     requestAnimationFrame(this.loop)
   }
   bind(){
-    window.addEventListener("resize",()=>this.resizeCanvas());
-    window.addEventListener("orientationchange",()=>this.resizeCanvas());
+    window.addEventListener("resize",()=>{this.updateUIHeight();this.resizeCanvas()});
+    window.addEventListener("orientationchange",()=>{this.updateUIHeight();this.resizeCanvas()});
+    const ui=document.getElementById("ui");
+    if(window.ResizeObserver){
+      const ro=new ResizeObserver(()=>this.updateUIHeight());
+      ro.observe(ui);
+      this._ro=ro;
+    }
     window.addEventListener("keydown",e=>{this.keys[e.key]=true});
     window.addEventListener("keyup",e=>{this.keys[e.key]=false});
     canvas.addEventListener("click",e=>{
@@ -159,6 +167,15 @@ class Game{
     // Update cell size for rendering and logic
     this.map.setCellSize(w/GRID_W,h/GRID_H);
   }
+  updateUIHeight(){
+    const ui=document.getElementById("ui");
+    if(!ui) return;
+    const hNow=Math.ceil(ui.getBoundingClientRect().height);
+    if(this._lastUIH!==hNow){
+      this._lastUIH=hNow;
+      document.documentElement.style.setProperty('--ui-h',`${hNow}px`);
+    }
+  }
   update(dt){
     this.queen.update(this.keys,dt,{w:canvas.width,h:canvas.height},this.touchDir);
     const c=this.map.cellAtPx(this.queen.x,this.queen.y);
@@ -215,8 +232,7 @@ class Game{
     elMoney.textContent=String(this.money);
     btnEstablish.disabled=!this.queen;
     btnSell.disabled=!(h&&h.honey>=1)
-    const hNow=Math.ceil(uiEl.getBoundingClientRect().height);
-    if(this._lastUIH!==hNow){this._lastUIH=hNow;canvas.style.marginTop=`${hNow+8}px`;this.resizeCanvas()}
+    this.updateUIHeight();
   }
   loop(t){
     const dt=Math.min(0.033,(t-this.last)/1000);this.last=t;
