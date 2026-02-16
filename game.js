@@ -144,11 +144,9 @@ class Game{
     })
   }
   resizeCanvas(){
-    const ui=document.getElementById("ui");
     const padding=16;
     const availW=window.innerWidth - padding*2;
-    const uiH=ui.getBoundingClientRect().height;
-    const availH=window.innerHeight - uiH - padding*2;
+    const availH=window.innerHeight - padding*2;
     const ratio=GRID_W/GRID_H;
     let w=Math.min(availW, availH*ratio);
     let h=w/ratio;
