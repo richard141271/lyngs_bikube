@@ -58,7 +58,6 @@ class Game{
     this.touchDir={x:0,y:0};
     this.particles=[];
     this.hives=[];this.selected=-1;
-    this._lastUIH=0;
     this.resizeCanvas();
     this.queen=new Queen(canvas.width/2,canvas.height/2);
     this.last=performance.now();
@@ -78,12 +77,6 @@ class Game{
   bind(){
     window.addEventListener("resize",()=>{this.resizeCanvas()});
     window.addEventListener("orientationchange",()=>{this.resizeCanvas()});
-    const ui=document.getElementById("ui");
-    if(window.ResizeObserver){
-      const ro=new ResizeObserver(()=>this.resizeCanvas());
-      ro.observe(ui);
-      this._ro=ro;
-    }
     window.addEventListener("keydown",e=>{this.keys[e.key]=true});
     window.addEventListener("keyup",e=>{this.keys[e.key]=false});
     canvas.addEventListener("click",e=>{
@@ -151,18 +144,12 @@ class Game{
   }
   resizeCanvas(){
     const padding=16;
-    const ui=document.getElementById("ui");
-    const spacer=document.getElementById("ui-spacer");
-    const uiH=Math.ceil(ui?.getBoundingClientRect().height||0);
-    if(spacer) spacer.style.height=`${uiH+8}px`;
     const availW=window.innerWidth - padding*2;
-    const availH=window.innerHeight - uiH - padding*2;
     const ratio=GRID_W/GRID_H;
-    let w=Math.min(availW, availH*ratio);
-    let h=w/ratio;
-    if(h>availH){h=availH;w=h*ratio}
+    let w=Math.max(320,Math.min(960,Math.floor(availW)));
+    let h=Math.floor(w/ratio);
     w=Math.max(320,Math.floor(w));
-    h=Math.max(240,Math.floor(h));
+    h=Math.max(240,h);
     canvas.width=w;
     canvas.height=h;
     canvas.style.width=`${w}px`;

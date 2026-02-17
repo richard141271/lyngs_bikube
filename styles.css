@@ -2,8 +2,8 @@
 html,body{height:100%;margin:0;padding:0;background:#f3f6ef;color:#24301e;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
 body{padding-top:0}
 html,body{overscroll-behavior:contain;-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none}
-#ui{position:fixed;top:0;left:0;right:0;z-index:1000;padding:calc(8px + env(safe-area-inset-top,0px)) 12px 8px 12px;background:rgba(255,255,255,.95);backdrop-filter:saturate(1.2) blur(6px);display:flex;flex-direction:column;gap:6px;border-bottom:1px solid #d7e0cc;margin:0}
-#ui-spacer{display:block;height:0}
+#ui{position:static;max-width:960px;margin:8px auto 12px auto;padding:12px;background:rgba(255,255,255,.95);backdrop-filter:saturate(1.2) blur(6px);display:flex;flex-direction:column;gap:6px;border-radius:10px;border:1px solid #d7e0cc}
+#ui-spacer{display:none;height:0}
 #title{font-weight:800;letter-spacing:.3px}
 #stats{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
 #stats span{margin-right:10px}
@@ -12,7 +12,5 @@ button{appearance:none;border:0;background:#2f5f2a;color:#fff;padding:8px 12px;b
 button:disabled{opacity:.5;cursor:not-allowed}
 button#btnRestart{background:#8a4b2a}
 .hint{opacity:.8;font-size:.9rem}
-/* Canvas under fast UI; JS setter padding-top på body lik UI-høyde */
-#game{display:block;margin:0 auto 16px auto;border:2px solid #d7e0cc;border-radius:10px;background:#e5f0da}
-/* Mobilvennlig: skru av scroll/zoom-gest på canvas og gjør responsiv bredde */
-#game{touch-action:none;-webkit-user-select:none;user-select:none;width:100%;max-width:960px;height:auto}
+/* Canvas under UI, sentrert */
+#game{display:block;margin:0 auto 16px auto;border:2px solid #d7e0cc;border-radius:10px;background:#e5f0da;touch-action:none;-webkit-user-select:none;user-select:none;width:100%;max-width:960px;height:auto}
