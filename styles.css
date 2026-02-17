@@ -2,7 +2,7 @@
 html,body{height:100%;margin:0;padding:0;background:#f3f6ef;color:#24301e;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
 body{padding-top:0}
 html,body{overscroll-behavior:contain;-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none}
-#ui{position:static;max-width:960px;margin:8px auto 12px auto;padding:12px;background:rgba(255,255,255,.95);backdrop-filter:saturate(1.2) blur(6px);display:flex;flex-direction:column;gap:6px;border-radius:10px;border:1px solid #d7e0cc}
+#ui{position:static;max-width:960px;margin:8px auto 32px auto;padding:12px;background:rgba(255,255,255,.95);backdrop-filter:saturate(1.2) blur(6px);display:flex;flex-direction:column;gap:6px;border-radius:10px;border:1px solid #d7e0cc}
 #ui-spacer{display:none;height:0}
 #title{font-weight:800;letter-spacing:.3px}
 #stats{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
