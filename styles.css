@@ -1,16 +1,124 @@
 *{box-sizing:border-box}
-html,body{height:100%;margin:0;padding:0;background:#f3f6ef;color:#24301e;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
-body{padding-top:0}
-html,body{overscroll-behavior:contain;-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none}
-#ui{position:static;max-width:960px;margin:8px auto 32px auto;padding:12px;background:rgba(255,255,255,.95);backdrop-filter:saturate(1.2) blur(6px);display:flex;flex-direction:column;gap:6px;border-radius:10px;border:1px solid #d7e0cc}
-#ui-spacer{display:none;height:0}
-#title{font-weight:800;letter-spacing:.3px}
-#stats{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
-#stats span{margin-right:10px}
-#controls{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-button{appearance:none;border:0;background:#2f5f2a;color:#fff;padding:8px 12px;border-radius:8px;font-weight:600;cursor:pointer;box-shadow:0 2px 0 rgba(0,0,0,.1)}
-button:disabled{opacity:.5;cursor:not-allowed}
-button#btnRestart{background:#8a4b2a}
-.hint{opacity:.8;font-size:.9rem}
-/* Canvas under UI, sentrert */
-#game{display:block;margin:0 auto 16px auto;border:2px solid #d7e0cc;border-radius:10px;background:#e5f0da;touch-action:none;-webkit-user-select:none;user-select:none;width:100%;max-width:960px;height:auto}
+html,body{height:100%;margin:0;padding:0;background:#f3f6ef;color:#24301e;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;overflow:hidden;overscroll-behavior:contain;-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto;
+  background: #f3f6ef;
+}
+
+/* TOP HEADER: Stats only */
+#ui-header {
+  flex: 0 0 auto;
+  padding: 8px 12px;
+  background: #fff;
+  border-bottom: 1px solid #d7e0cc;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 10;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  padding-top: calc(8px + env(safe-area-inset-top));
+}
+
+#stats-bar {
+  display: flex;
+  gap: 16px;
+  width: 100%;
+  justify-content: space-around;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.stat-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* GAME AREA: Fills remaining space */
+#game-container {
+  flex: 1 1 auto;
+  position: relative;
+  background: #e5f0da;
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#game {
+  display: block;
+  box-shadow: 0 0 20px rgba(0,0,0,0.1);
+  background: #e5f0da;
+  touch-action: none;
+  -webkit-user-select: none;
+  user-select: none;
+  /* Canvas sizing is handled by JS, but this ensures it never overflows container */
+  max-width: 100%;
+  max-height: 100%;
+  height: auto; 
+  object-fit: contain;
+}
+
+/* BOTTOM FOOTER: Controls */
+#ui-footer {
+  flex: 0 0 auto;
+  padding: 12px;
+  background: #fff;
+  border-top: 1px solid #d7e0cc;
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  z-index: 10;
+  padding-bottom: calc(12px + env(safe-area-inset-bottom));
+  box-shadow: 0 -2px 4px rgba(0,0,0,0.05);
+}
+
+button {
+  appearance: none;
+  border: 0;
+  background: #2f5f2a;
+  color: #fff;
+  padding: 12px;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  box-shadow: 0 4px 0 rgba(47, 95, 42, 0.4);
+  transition: transform 0.1s, box-shadow 0.1s;
+  flex: 1; /* Make buttons grow to fill width */
+  text-align: center;
+  white-space: nowrap;
+}
+
+button:active {
+  transform: translateY(2px);
+  box-shadow: 0 2px 0 rgba(47, 95, 42, 0.4);
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: #888;
+  box-shadow: none;
+}
+
+button#btnRestart {
+  background: #8a4b2a;
+  flex: 0 0 auto; /* Keep restart small */
+  width: 50px;
+  padding: 12px 0;
+  box-shadow: 0 4px 0 rgba(138, 75, 42, 0.4);
+}
+button#btnRestart:active {
+  box-shadow: 0 2px 0 rgba(138, 75, 42, 0.4);
+}
+
+/* Utility classes */
+.hidden { display: none !important; }

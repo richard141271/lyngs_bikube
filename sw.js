@@ -1,4 +1,4 @@
-const C='biekoloni-v2';
+const C='biekoloni-v3';
 const ASSETS=[
   './',
   'index.html',

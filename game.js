@@ -143,18 +143,20 @@ class Game{
     })
   }
   resizeCanvas(){
-    const padding=16;
-    const availW=window.innerWidth - padding*2;
+    const container = document.getElementById("game-container");
+    if(!container) return; // Fallback or wait for DOM
+    const availW=container.clientWidth;
+    const availH=container.clientHeight;
     const ratio=GRID_W/GRID_H;
-    let w=Math.max(320,Math.min(960,Math.floor(availW)));
-    let h=Math.floor(w/ratio);
-    w=Math.max(320,Math.floor(w));
-    h=Math.max(240,h);
+    let w=availW;
+    let h=w/ratio;
+    if(h>availH){h=availH;w=h*ratio}
+    w=Math.floor(w);
+    h=Math.floor(h);
     canvas.width=w;
     canvas.height=h;
-    canvas.style.width=`${w}px`;
-    canvas.style.height=`${h}px`;
-    // Update cell size for rendering and logic
+    // canvas.style.width=`${w}px`; // Let CSS handle visual size
+    // canvas.style.height=`${h}px`;
     this.map.setCellSize(w/GRID_W,h/GRID_H);
   }
   update(dt){
@@ -202,17 +204,17 @@ class Game{
     this.queen.draw(ctx)
   }
   ui(){
-    const uiEl=document.getElementById("ui");
-    elActiveHives.textContent=String(this.hives.length);
-    elTotalHoney.textContent=String(Math.floor(this.totalProduced));
-    elScore.textContent=String(this.score);
-    elHighScore.textContent=String(this.highScore);
+    if(elActiveHives) elActiveHives.textContent=String(this.hives.length);
+    if(elTotalHoney) elTotalHoney.textContent=String(Math.floor(this.totalProduced));
+    if(elScore) elScore.textContent=String(this.score);
+    if(elHighScore) elHighScore.textContent=String(this.highScore);
     const h=this.hives[this.selected];
-    if(h){elSelBees.textContent=String(h.bees);elSelHoney.textContent=String(Math.floor(h.honey));elSelLarvae.textContent="0"}
-    else{elSelBees.textContent="0";elSelHoney.textContent="0";elSelLarvae.textContent="0"}
-    elMoney.textContent=String(this.money);
-    btnEstablish.disabled=!this.queen;
-    btnSell.disabled=!(h&&h.honey>=1)
+    if(elSelBees) elSelBees.textContent=h?String(h.bees):"0";
+    if(elSelHoney) elSelHoney.textContent=h?String(Math.floor(h.honey)):"0";
+    if(elSelLarvae) elSelLarvae.textContent=h?"0":"0";
+    if(elMoney) elMoney.textContent=String(this.money);
+    if(btnEstablish) btnEstablish.disabled=!this.queen;
+    if(btnSell) btnSell.disabled=!(h&&h.honey>=1)
   }
   loop(t){
     const dt=Math.min(0.033,(t-this.last)/1000);this.last=t;

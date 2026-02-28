@@ -2,7 +2,7 @@
 <html lang="no">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Biekoloni – MVP</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -15,33 +15,38 @@
   <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 </head>
 <body>
-  <div id="ui">
-    <div id="title">Biekoloni</div>
-    <div id="stats">
-      <div id="global-stats">
-        <span>Aktive kuber: <strong id="activeHives">0</strong></span>
-        <span>Totalt produsert: <strong id="totalHoney">0</strong></span>
-        <span>Score: <strong id="score">0</strong></span>
-        <span>High score: <strong id="highScore">0</strong></span>
-        <span>Penger: <strong id="money">0</strong></span>
+  <div id="app">
+    <header id="ui-header">
+      <div id="stats-bar">
+        <div class="stat-item" title="Penger">💰 <span id="money">0</span></div>
+        <div class="stat-item" title="Score">🏆 <span id="score">0</span></div>
+        <div class="stat-item" title="Honning">🍯 <span id="totalHoney">0</span></div>
+        <div class="stat-item" title="Kuber">🐝 <span id="activeHives">0</span></div>
       </div>
-      <div id="selected-stats">
-        <span>Kube bier: <strong id="selBees">0</strong></span>
-        <span>Honning: <strong id="selHoney">0</strong></span>
-        <span>Larver: <strong id="selLarvae">0</strong></span>
+      <!-- Hidden elements to maintain compatibility with existing JS logic -->
+      <div style="display:none">
+        <div id="ui"></div> <!-- Dummy target for any legacy selectors -->
+        <span id="highScore">0</span>
+        <span id="selBees">0</span>
+        <span id="selHoney">0</span>
+        <span id="selLarvae">0</span>
+        <div id="title">Biekoloni</div>
       </div>
-    </div>
-    <div id="controls">
-      <button id="btnEstablish" disabled>Etabler kube</button>
+    </header>
+
+    <main id="game-container">
+      <canvas id="game" width="960" height="600"></canvas>
+    </main>
+
+    <footer id="ui-footer">
+      <button id="btnEstablish" disabled>Etabler</button>
       <button id="btnSwarm" disabled>Sverm</button>
-      <button id="btnSell" disabled>Selg honning</button>
+      <button id="btnSell" disabled>Selg</button>
+      <button id="btnRestart" title="Restart">↺</button>
       <button id="btnInstall" style="display:none">Installer</button>
-      <button id="btnRestart">Restart</button>
-      <span class="hint">Styring: WASD eller piltaster. Klikk på kube for å velge.</span>
-    </div>
+    </footer>
   </div>
-  <div id="ui-spacer"></div>
-  <canvas id="game" width="960" height="600"></canvas>
+  
   <script src="map.js"></script>
   <script src="bees.js"></script>
   <script src="game.js"></script>
